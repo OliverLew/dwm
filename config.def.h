@@ -2,6 +2,8 @@
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const int gappx              = 16;       /* gaps between windows */
+static const int gapsingle          = 1;        /* gaps when there is only 1 window */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
@@ -100,6 +102,9 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask|ControlMask, XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask|ControlMask, XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_minus,  setgaps,        {.i = -8 } },
+	{ MODKEY|ControlMask,           XK_equal,  setgaps,        {.i = +8 } },
+	{ MODKEY|ControlMask,           XK_0,      setgaps,        {.i = 0  } },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
