@@ -182,6 +182,7 @@ static long getstate(Window w);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
+static void grid(Monitor *m);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
@@ -1060,6 +1061,46 @@ grabkeys(void)
 				for (j = 0; j < LENGTH(modifiers); j++)
 					XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
 						True, GrabModeAsync, GrabModeAsync);
+	}
+}
+
+void
+grid(Monitor *m) {
+	unsigned int n, cols, rows, cn, rn, i, cx, cy, cw, ch;
+	Client *c;
+
+	for(n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++) ;
+	if(n == 0)
+		return;
+	if(n == 1){
+		c = nexttiled(m->clients);
+		if(gapsingle)
+			resize(c, m->wx + m->gappx, m->wy + m->gappx, m->ww - 2 * (c->bw + m->gappx), m->wh - 2 * (c->bw + m->gappx), 0);
+		else
+			resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+		return;
+	}
+
+	/* grid dimensions */
+	for(cols = 0; cols * cols < n; cols++) ;
+	rows = n / cols;
+
+	/* window geometries */
+	cw = cols ? m->ww / cols : m->ww;
+	cn = 0; /* current column number */
+	rn = 0; /* current row number */
+	for(i = 0, c = nexttiled(m->clients); c; i++, c = nexttiled(c->next)) {
+		if(i / rows + 1 > cols - n % cols)
+			rows = n / cols + 1;
+		ch = rows ? (m->wh - m->gappx) / rows : m->wh;
+		cx = m->wx + m->gappx + cn * cw;
+		cy = m->wy + m->gappx + rn * ch;
+		resize(c, cx - cn*m->gappx / cols, cy, cw - 2 * c->bw - m->gappx - m->gappx / cols, ch - 2 * c->bw - m->gappx, False);
+		rn++;
+		if(rn >= rows) {
+			rn = 0;
+			cn++;
+		}
 	}
 }
 
