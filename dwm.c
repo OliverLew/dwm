@@ -1134,14 +1134,25 @@ grabkeys(void)
 	{
 		unsigned int i, j;
 		unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-		KeyCode code;
+		int kc, kcmin, kcmax, kcper;
+		KeySym keysym, *keysyms;
 
 		XUngrabKey(dpy, AnyKey, AnyModifier, root);
-		for (i = 0; i < LENGTH(keys); i++)
-			if ((code = XKeysymToKeycode(dpy, keys[i].keysym)))
-				for (j = 0; j < LENGTH(modifiers); j++)
-					XGrabKey(dpy, code, keys[i].mod | modifiers[j], root,
-						True, GrabModeAsync, GrabModeAsync);
+
+		/* retrieve all the keycode -> keysym mappings */
+		XDisplayKeycodes(dpy, &kcmin, &kcmax);
+		keysyms = XGetKeyboardMapping(dpy, kcmin, kcmax - kcmin + 1, &kcper);
+
+		/* only look at the first keysym for each keycode as we handle shifted states */
+		for (kc = kcmin; kc <= kcmax; kc++) {
+			keysym = keysyms[(kc - kcmin) * kcper];
+			for (i = 0; i < LENGTH(keys); i++)
+				if (keys[i].keysym == keysym)
+					for (j = 0; j < LENGTH(modifiers); j++)
+						XGrabKey(dpy, kc, keys[i].mod | modifiers[j], root, True, GrabModeAsync, GrabModeAsync);
+		}
+
+		XFree(keysyms);
 	}
 }
 
