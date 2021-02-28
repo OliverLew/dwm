@@ -1,18 +1,18 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const int gappx              = 16;       /* gaps between windows */
-static const int gapsingle          = 1;        /* gaps when there is only 1 window */
-static const unsigned int snap      = 32;       /* snap pixel */
-static const int showbar            = 1;        /* 0 means no bar */
-static const int topbar             = 1;        /* 0 means bottom bar */
+static unsigned int borderpx  = 1;        /* border pixel of windows */
+static int gappx              = 16;       /* gaps between windows */
+static int gapsingle          = 1;        /* gaps when there is only 1 window */
+static unsigned int snap      = 32;       /* snap pixel */
+static int showbar            = 1;        /* 0 means no bar */
+static int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "monospace:size=10" };
 static const char dmenufont[]       = "monospace:size=10";
-static const int barheightmin       = 24;       /* minimum height if > 0 */
-static const int barpaddingh        = 2;        /* horizontal padding for statusbar */
-static const int barpaddingtop      = 2;        /* top padding for statusbar */
-static const int barpaddingbottom   = 0;        /* bottom padding for statusbar */
+static int barheightmin       = 24;       /* minimum height if > 0 */
+static int barpaddingh        = 2;        /* horizontal padding for statusbar */
+static int barpaddingtop      = 2;        /* top padding for statusbar */
+static int barpaddingbottom   = 0;        /* bottom padding for statusbar */
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -40,9 +40,9 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static int nmaster     = 1;    /* number of clients in master area */
+static int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -72,6 +72,23 @@ static const char *termcmd[]  = { "st", NULL };
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
 static char *statuscmds[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f" };
 static char *statuscmd[] = { "dwm-status", NULL, NULL };
+
+/*
+ * Xresources preferences to load at startup
+ */
+ResourcePref resources[] = {
+		{ "borderpx",           INTEGER, &borderpx },
+		{ "gappx",              INTEGER, &gappx },
+		{ "gapsingle",          INTEGER, &gapsingle },
+		{ "snap",               INTEGER, &snap },
+		{ "showbar",            INTEGER, &showbar },
+		{ "topbar",             INTEGER, &topbar },
+		{ "barheight",          INTEGER, &barheightmin },
+
+		{ "nmaster",            INTEGER, &nmaster },
+		{ "resizehints",        INTEGER, &resizehints },
+		{ "mfact",              FLOAT,   &mfact },
+};
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
