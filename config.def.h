@@ -13,18 +13,26 @@ static int barheightmin       = 24;       /* minimum height if > 0 */
 static int barpaddingh        = 2;        /* horizontal padding for statusbar */
 static int barpaddingtop      = 2;        /* top padding for statusbar */
 static int barpaddingbottom   = 0;        /* bottom padding for statusbar */
-static const char col_gray1[]       = "#222222";
-static const char col_gray2[]       = "#444444";
-static const char col_gray3[]       = "#bbbbbb";
-static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#005577";
-static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
-	               { col_gray1, col_gray4, col_gray2 },
-	               { col_gray1, col_cyan,  col_gray2 },
+static char foreground[]      = "#000000";
+static char background[]      = "#ffffff";
+static char color0[]          = "#000000";
+static char color1[]          = "#AA0000";
+static char color2[]          = "#00AA00";
+static char color3[]          = "#AA5500";
+static char color4[]          = "#0000AA";
+static char color5[]          = "#AA00AA";
+static char color6[]          = "#00AAAA";
+static char color7[]          = "#AAAAAA";
+static char color8[]          = "#555555";
+static const char *base_colors[]    = {
+	color0, color1, color2, color3,
+	color4, color5, color6, color7, color8
 };
+static const char *colors[][3]      = {
+	/*               fg          bg          border   */
+	[SchemeNorm] = { foreground, background, color0 },
+	[SchemeSel]  = { background, color6,     color6 },
+ };
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
@@ -66,7 +74,7 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
 /* commands spawned when clicking statusbar, the mouse button pressed is exported as BUTTON */
@@ -84,7 +92,17 @@ ResourcePref resources[] = {
 		{ "showbar",            INTEGER, &showbar },
 		{ "topbar",             INTEGER, &topbar },
 		{ "barheight",          INTEGER, &barheightmin },
-
+		{ "foreground",         STRING,  &foreground },
+		{ "background",         STRING,  &background },
+		{ "color0",             STRING,  &color0 },
+		{ "color1",             STRING,  &color1 },
+		{ "color2",             STRING,  &color2 },
+		{ "color3",             STRING,  &color3 },
+		{ "color4",             STRING,  &color4 },
+		{ "color5",             STRING,  &color5 },
+		{ "color6",             STRING,  &color6 },
+		{ "color7",             STRING,  &color7 },
+		{ "color8",             STRING,  &color8 },
 		{ "nmaster",            INTEGER, &nmaster },
 		{ "resizehints",        INTEGER, &resizehints },
 		{ "mfact",              FLOAT,   &mfact },
